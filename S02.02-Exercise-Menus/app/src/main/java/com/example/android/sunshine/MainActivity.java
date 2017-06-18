@@ -97,12 +97,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO (2) Create a menu resource in res/menu/ called forecast.xml
-    // TODO (3) Add one item to the menu with an ID of action_refresh
-    // TODO (4) Set the title of the menu item to "Refresh" using strings.xml
+    // Override onCreateOptionsMenu to inflate the menu for this Activity
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        android.view.MenuInflater inflater = getMenuInflater();
+        // Return true to display the menu
+        inflater.inflate(R.menu.forecast, menu);
+        return true;
+    }
+    // Override onOptionsItemSelected to handle clicks on the refresh button
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        int id = item.getItemId();
 
-    // TODO (5) Override onCreateOptionsMenu to inflate the menu for this Activity
-    // TODO (6) Return true to display the menu
+        if (id == R.id.action_refresh) {
+            mWeatherTextView.setText("");
+            loadWeatherData();
+            return true;
+        }
 
-    // TODO (7) Override onOptionsItemSelected to handle clicks on the refresh button
+        return super.onOptionsItemSelected(item);
+    }
 }
