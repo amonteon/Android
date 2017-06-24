@@ -1,4 +1,4 @@
-package com.example.alejandramonteon.androiddemotoy;
+package com.example.alejandramonteon.newsapp;
 
 import org.junit.Test;
 
