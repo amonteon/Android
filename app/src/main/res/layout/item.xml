@@ -9,7 +9,19 @@
     android:background="?attr/selectableItemBackground">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
@@ -19,5 +31,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/urlToImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/publishedAt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
 
 </LinearLayout>

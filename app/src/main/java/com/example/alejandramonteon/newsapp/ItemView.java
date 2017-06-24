@@ -47,25 +47,37 @@ public class ItemView extends RecyclerView.Adapter<ItemView.ItemHolder>{
     }
 
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView name;
+        TextView author;
+        TextView title;
+        TextView description;
         TextView url;
+        TextView urlToImage;
+        TextView publishedAt;
 
         ItemHolder(View view){
             super(view);
-            name = (TextView)view.findViewById(R.id.name);
+            author = (TextView)view.findViewById(R.id.author);
+            title = (TextView)view.findViewById(R.id.title);
+            description = (TextView)view.findViewById(R.id.description);
             url = (TextView)view.findViewById(R.id.url);
+            urlToImage = (TextView)view.findViewById(R.id.urlToImage);
+            publishedAt = (TextView)view.findViewById(R.id.publishedAt);
             view.setOnClickListener(this);
         }
 
         public void bind(int pos){
             News news = data.get(pos);
-            name.setText(news.getTitle());
+            author.setText(news.getAuthor());
+            title.setText(news.getTitle());
+            description.setText(news.getDescription());
             url.setText(news.getUrl());
+            urlToImage.setText(news.getUrltoImage());
+            publishedAt.setText(news.getPublishedAt());
         }
 
         @Override
         public void onClick(View v) {
-            int pos = getItemCount();
+            int pos = getAdapterPosition();
             listener.onItemClick(pos);
         }
     }
