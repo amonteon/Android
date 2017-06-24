@@ -1,4 +1,4 @@
-package com.example.alejandramonteon.androiddemotoy;
+package com.example.alejandramonteon.newsapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
