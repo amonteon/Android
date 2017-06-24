@@ -46,6 +46,27 @@ public class NetworkUtils {
         }
     }
 
+    public static java.util.ArrayList<News> parseJSON(String json) throws org.json.JSONException{
+        java.util.ArrayList<News> result = new java.util.ArrayList<>();
+        org.json.JSONObject main = new org.json.JSONObject(json);
+        org.json.JSONArray items = main.getJSONArray("items");
+
+        for(int i = 0; i < items.length(); i++){
+            org.json.JSONObject item = items.getJSONObject(i);
+            //String article = item.getString("article");
+            org.json.JSONObject source = item.getJSONObject("source");
+            String author = source.getString("author");
+            String title = source.getString("title");
+            String url = item.getString("url");
+            String description = source.getString("description");
+            String urlToImage = source.getString("urlToImage");
+            String publishedAt = source.getString("publishedAt");
+            News news = new News(author, title, description, url, urlToImage, publishedAt);
+            result.add(news);
+        }
+        return result;
+    }
+
 
 
 
