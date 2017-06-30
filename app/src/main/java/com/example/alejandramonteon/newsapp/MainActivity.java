@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected ArrayList<News> doInBackground(URL... params) {
             ArrayList<News> result = null;
-            URL url = NetworkUtils.createURL(query, "stars");
+            URL url = NetworkUtils.createURL(query, "latest", "04be58284b3b47be99d63ece1b582ae3");
             Log.d(TAG, "url: " + url.toString());
             try {
                 String json = NetworkUtils.getResponseFromHttpUrl(url);
