@@ -1,80 +1,106 @@
 package com.example.alejandramonteon.newsapp;
 
 
-
+import com.example.alejandramonteon.newsapp.data.NewsItem;
 
 /**
  * Created by alejandramonteon on 6/18/17.
  */
 
-public class NetworkUtils {
+import android.net.Uri;
+import android.util.Log;
 
-    private static final String BASE_URL =
-            "https://newsapi.org/v1/articles";
-    public static final String PARAM_SORT = "sort";
-    public static final String PARAM_SOURCE = "source";
-    public static final String PARAM_APIKEY = "apiKey";
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+public class NetworkUtils {
     public static final String TAG = "NetworkUtils";
 
-    public static java.net.URL createURL(java.lang.String searchQuery, java.lang.String sortBy, String api){
-        android.net.Uri uri = android.net.Uri.parse(BASE_URL).buildUpon()
-                .appendQueryParameter(PARAM_SOURCE, searchQuery)
-                .appendQueryParameter(PARAM_SORT, sortBy)
-                .appendQueryParameter(PARAM_APIKEY, api).build();
+    public static final String GITHUB_BASE_URL =
+            "https://newsapi.org/v1/articles?";
+    public static final String PARAM_SOURCE = "source";
+    public static final String PARAM_SORTBY = "sortBy";
+    public static final String PARAM_API_KEY= "apiKey";
 
-        java.net.URL url = null;
+    // Creates url based on base and api key
+    public static URL makeURL() {
+        Uri uri = Uri.parse(GITHUB_BASE_URL).buildUpon()
+                .appendQueryParameter(PARAM_SOURCE, "the-next-web")
+                .appendQueryParameter(PARAM_SORTBY, "latest")
+                .appendQueryParameter(PARAM_API_KEY, "04be58284b3b47be99d63ece1b582ae3")
+                .build();
+
+        URL url = null;
         try {
             String urlString = uri.toString();
-            android.util.Log.d(TAG, "Url: " + urlString);
-            url = new java.net.URL(uri.toString());
-        } catch (java.net.MalformedURLException e) {
+            Log.d(TAG, "Url: " + urlString);
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
-
     }
-
-
-    public static String getResponseFromHttpUrl(java.net.URL url) throws java.io.IOException {
-        java.net.HttpURLConnection urlConnection = (java.net.HttpURLConnection) url.openConnection();
+    // Setup http connection
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            java.io.InputStream in = urlConnection.getInputStream();
-            java.util.Scanner input = new java.util.Scanner(in);
+            InputStream in = urlConnection.getInputStream();
+            Scanner input = new Scanner(in);
 
             input.useDelimiter("\\A");
-            return (input.hasNext()) ? input.next() : null;
+            String result = (input.hasNext()) ? input.next() : null;
+            return result;
 
+        }catch (IOException e){
+            e.printStackTrace();
         } finally {
             urlConnection.disconnect();
         }
+        return null;
     }
-
-    public static java.util.ArrayList<News> parseJSON(String json) throws org.json.JSONException{
-        java.util.ArrayList<News> result = new java.util.ArrayList<>();
-        org.json.JSONObject main = new org.json.JSONObject(json);
-
-        org.json.JSONArray items = main.getJSONArray("items");
+// JSON Data parser
+    public static ArrayList<NewsItem> parseJSON(String json) throws JSONException {
+        ArrayList<NewsItem> result = new ArrayList<>();
+        JSONObject main = new JSONObject(json);
+        // store articles in json object
+        JSONArray items = main.getJSONArray("articles");
+        String imgUrl = null;
 
         for(int i = 0; i < items.length(); i++){
-            org.json.JSONObject item = items.getJSONObject(i);
-            String article = item.getString("articles");
-            org.json.JSONObject source = item.getJSONObject("source");
-            String author = source.getString("author");
-            String title = source.getString("title");
+            JSONObject item = items.getJSONObject(i);
+            // store json article: title, date, description, url and image into array list
+            String author = item.getString("author");
+            String title = item.getString("title");
+            String description = item.getString("description");
             String url = item.getString("url");
-            String description = source.getString("description");
-            String urlToImage = source.getString("urlToImage");
-            String publishedAt = source.getString("publishedAt");
-            News news = new News(author, title, description, url, urlToImage, publishedAt);
-            result.add(news);
+            String publishedDate = item.getString("published_date");
+
+            // Store Images
+            JSONArray mediaObjects = item.optJSONArray("media");
+            if(mediaObjects != null){
+                JSONObject img = mediaObjects.getJSONObject(0);
+                JSONArray metaData = img.getJSONArray("media-metadata");
+                JSONObject thumbNailMeta = metaData.getJSONObject(0);
+                imgUrl = thumbNailMeta.getString("urlToImage");
+            }
+
+            result.add(new NewsItem(author, title, description, url, publishedDate, imgUrl));
+
         }
+        Log.d(TAG, "final articles size: " + result.size());
         return result;
     }
 
+
 }
-
-
-
-
-
