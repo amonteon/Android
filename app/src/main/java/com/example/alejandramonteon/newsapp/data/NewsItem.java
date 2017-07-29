@@ -1,21 +1,21 @@
-package com.example.alejandramonteon.newsapp;
+package com.example.alejandramonteon.newsapp.data;
 
-public class News {
+public class NewsItem {
 
     private String author;
     private String title;
     private String url;
     private String description;
     private String urlToImage;
-    private String publishedAt;
+    private String published_date;
 
-    public News(String author, String title, String url, String description, String urlToImage, String publishedAt){
+    public NewsItem(String author, String title, String url, String description, String urlToImage, String published_date){
         this.author = author;
         this.title = title;
         this.url = url;
         this. description = description;
         this.urlToImage = urlToImage;
-        this.publishedAt = publishedAt;
+        this.published_date = published_date;
     }
 
     public String getAuthor() {
@@ -57,12 +57,12 @@ public class News {
 
     }
 
-    public String getPublishedAt(){
-        return publishedAt;
+    public String getPublished_date(){
+        return published_date;
     }
 
-    public void setPublishedAt(String publishedAt){
-        this.publishedAt = publishedAt;
+    public void setPublished_date(String published_date){
+        this.published_date = published_date;
     }
 
 }
